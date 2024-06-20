@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "betteruikeybinds",
+  "version": "${version}",
+  "name": "BetterUIKeybinds",
+  "description": "",
+  "authors": [],
+  "contact": {
+    "repo": "https://github.com/LukynkaCZE/BetterUIKeybinds"
+  },
+  "license": "MIT",
+  "icon": "assets/betteruikeybinds/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "cz.lukynka.betteruikeybinds.client.BetterUIKeybindsClient"
+    ],
+    "main": [
+      "cz.lukynka.betteruikeybinds.BetterUIKeybinds"
+    ],
+    "modmenu": [
+      "cz.lukynka.betteruikeybinds.client.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "betteruikeybinds.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
