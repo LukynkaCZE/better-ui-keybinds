@@ -17,9 +17,6 @@
     ],
     "main": [
       "cz.lukynka.betteruikeybinds.BetterUIKeybinds"
-    ],
-    "modmenu": [
-      "cz.lukynka.betteruikeybinds.client.ModMenuIntegration"
     ]
   },
   "mixins": [

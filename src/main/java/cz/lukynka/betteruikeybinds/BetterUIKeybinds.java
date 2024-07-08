@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class BetterUIKeybinds implements ModInitializer {
 
-    private static final List<Keybind> keybindList = List.of(
+    public static final List<Keybind> keybindList = List.of(
             new SingleplayerJump(), // Main Menu -> Jumps into the singleplayer menu with "S"
             new MultiplayerJump(), // Main Menu -> Jumps into the multiplayer menu with "M"
             new MultiplayerListJump(), // Server List -> Joins server with "1-9" or "M" for 1
@@ -58,7 +58,7 @@ public class BetterUIKeybinds implements ModInitializer {
                 if (keybind.getScreen() == client.screen.getClass()) {
                     keybind.handle(key);
                     assert Minecraft.getInstance().screen != null;
-                    Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.NOTE_BLOCK_HAT, 1.7f));
+                    Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.NOTE_BLOCK_HAT, 1.3f));
                     return;
                 }
             }
