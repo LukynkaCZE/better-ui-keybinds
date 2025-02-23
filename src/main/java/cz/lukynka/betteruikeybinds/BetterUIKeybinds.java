@@ -1,12 +1,15 @@
 package cz.lukynka.betteruikeybinds;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.logging.LogUtils;
 import cz.lukynka.betteruikeybinds.client.keybinds.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.sounds.SoundEvents;
+import org.slf4j.Logger;
 
 import java.util.HashSet;
 import java.util.List;
@@ -49,13 +52,18 @@ public class BetterUIKeybinds implements ModInitializer {
         }
     }
 
+    public static Logger logger = LogUtils.getLogger();
+
     private void onKeyPress(Minecraft client, int key) {
         if(client.screen == null) return;
+
 
         for (Keybind keybind : keybindList) {
             if(keybind.getKeybinds().contains(key)) {
                 assert client.screen != null;
-                if (keybind.getScreen() == client.screen.getClass()) {
+                // "kennytvs-epic-force-close-loading-screen-mod-for-fabric" overried the main menu screen to open custom TitleBridgeScreen class
+                // added check for that so it works
+                if (keybind.getScreen() == client.screen.getClass() || keybind.getScreen() == TitleScreen.class && client.screen.getClass().getSimpleName().equals("TitleBridgeScreen")) {
                     keybind.handle(key);
                     assert Minecraft.getInstance().screen != null;
                     Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.NOTE_BLOCK_HAT, 1.3f));
