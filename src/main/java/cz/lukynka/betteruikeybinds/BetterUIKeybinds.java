@@ -3,10 +3,14 @@ package cz.lukynka.betteruikeybinds;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.logging.LogUtils;
 import cz.lukynka.betteruikeybinds.client.keybinds.*;
+import cz.lukynka.betteruikeybinds.client.protocol.ModInstalledPacket;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.sounds.SoundEvents;
@@ -14,9 +18,12 @@ import org.slf4j.Logger;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public class BetterUIKeybinds implements ModInitializer {
+
+    public static String VERSION = "";
 
     public static final List<Keybind> keybindList = List.of(
             new SingleplayerJump(), // Main Menu -> Jumps into the singleplayer menu with "S"
@@ -34,6 +41,14 @@ public class BetterUIKeybinds implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        Optional<ModContainer> container = FabricLoader.getInstance().getModContainer("betteruikeybinds");
+        container.ifPresent(modContainer -> VERSION = modContainer.getMetadata().getVersion().getFriendlyString());
+
+        PayloadTypeRegistry.playC2S().register(ModInstalledPacket.TYPE, ModInstalledPacket.STREAM_CODEC);
+        ClientPlayConnectionEvents.JOIN.register((listener, sender, minecraft) -> {
+            sender.sendPacket(new ModInstalledPacket(VERSION));
+        });
+
         ClientTickEvents.END_CLIENT_TICK.register(this::onClientTick);
     }
 
@@ -41,7 +56,7 @@ public class BetterUIKeybinds implements ModInitializer {
         long windowHandle = Minecraft.getInstance().getWindow().getWindow();
 
         for (Keybind keybind : keybindList) {
-            for(Integer key : keybind.getKeybinds()) {
+            for (Integer key : keybind.getKeybinds()) {
                 if (InputConstants.isKeyDown(windowHandle, key)) {
                     if (!pressedKeys.contains(key)) {
                         pressedKeys.add(key);
@@ -57,13 +72,12 @@ public class BetterUIKeybinds implements ModInitializer {
     public static Logger logger = LogUtils.getLogger();
 
     private void onKeyPress(Minecraft client, int key) {
-        if(client.screen == null) return;
-
+        if (client.screen == null) return;
 
         for (Keybind keybind : keybindList) {
-            if(keybind.getKeybinds().contains(key)) {
+            if (keybind.getKeybinds().contains(key)) {
                 assert client.screen != null;
-                // "kennytvs-epic-force-close-loading-screen-mod-for-fabric" overried the main menu screen to open custom TitleBridgeScreen class
+                // "kennytvs-epic-force-close-loading-screen-mod-for-fabric" overrides the main menu screen to open custom TitleBridgeScreen class
                 // added check for that so it works
                 if (keybind.getScreen() == client.screen.getClass() || keybind.getScreen() == TitleScreen.class && client.screen.getClass().getSimpleName().equals("TitleBridgeScreen")) {
                     keybind.handle(key);
