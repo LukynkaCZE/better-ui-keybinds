@@ -1,6 +1,7 @@
 package cz.lukynka.betteruikeybinds;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.platform.Window;
 import com.mojang.logging.LogUtils;
 import cz.lukynka.betteruikeybinds.client.keybinds.*;
 import cz.lukynka.betteruikeybinds.client.protocol.ModInstalledPacket;
@@ -53,11 +54,11 @@ public class BetterUIKeybinds implements ModInitializer {
     }
 
     private void onClientTick(Minecraft client) {
-        long windowHandle = Minecraft.getInstance().getWindow().getWindow();
+        Window window = Minecraft.getInstance().getWindow();
 
         for (Keybind keybind : keybindList) {
             for (Integer key : keybind.getKeybinds()) {
-                if (InputConstants.isKeyDown(windowHandle, key)) {
+                if (InputConstants.isKeyDown(window, key)) {
                     if (!pressedKeys.contains(key)) {
                         pressedKeys.add(key);
                         onKeyPress(client, key);

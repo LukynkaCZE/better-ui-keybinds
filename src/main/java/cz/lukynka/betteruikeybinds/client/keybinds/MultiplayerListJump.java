@@ -52,10 +52,10 @@ public class MultiplayerListJump implements Keybind {
         try {
             var server = screen.getServers().get(keyMap.get(key) - 1);
             for (GuiEventListener child : screen.children()) {
-                if(child.getClass() == ServerSelectionList.class) {
+                if (child.getClass() == ServerSelectionList.class) {
                     var entry = ((ServerSelectionList) child).children().get(keyMap.get(key) - 1);
-                    screen.setSelected(entry);
-                    screen.joinSelectedServer();
+                    screen.setFocused(entry);
+                    entry.join();
                     return;
                 }
             }

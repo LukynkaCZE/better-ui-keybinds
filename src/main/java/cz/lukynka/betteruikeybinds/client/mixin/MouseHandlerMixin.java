@@ -23,8 +23,8 @@ public class MouseHandlerMixin {
 
     @Inject(at = @At("HEAD"), method = "onScroll", cancellable = true)
     public void onScroll(long l, double d, double e, CallbackInfo ci) {
-        if (l == Minecraft.getInstance().getWindow().getWindow()) {
-            if (InputConstants.isKeyDown(l, GLFW.GLFW_KEY_LEFT_ALT)) {
+        if (l == Minecraft.getInstance().getWindow().handle()) {
+            if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow(), GLFW.GLFW_KEY_LEFT_ALT)) {
                 ci.cancel();
                 var isDirectionUp = e == 1;
                 var stepSize = 5;

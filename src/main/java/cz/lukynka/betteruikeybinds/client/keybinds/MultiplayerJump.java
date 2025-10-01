@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.TitleScreen;
+import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 
@@ -44,7 +45,7 @@ public class MultiplayerJump implements Keybind {
 //            BetterUIKeybinds.logger.info(button.getMessage().getContents().toString());
             if(button.getMessage().contains(Component.translatable("menu.multiplayer"))) {
                 System.out.println("Found");
-                button.onPress();
+                button.onPress(new MouseButtonInfo(0, 1));
             }
         }
     }

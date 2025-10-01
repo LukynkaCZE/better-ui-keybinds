@@ -4,6 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
+import net.minecraft.client.input.InputWithModifiers;
+import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 
@@ -38,7 +40,7 @@ public class MultiplayerAddServer implements Keybind {
             if(child.getClass() == Button.class) {
                 var button = (Button)child;
                 if(button.getMessage().contains(Component.translatable("selectServer.add"))) {
-                    button.onPress();
+                    button.onPress(new MouseButtonInfo(0, 1));
                 }
             }
         }
